@@ -1,6 +1,6 @@
 ## STACK
-Framework : Express JS
-ORM: Sequelize
+    Framework : Express JS
+    ORM: Sequelize
 
 ## SQL create table in DB
 ### database records example in ./data.json
