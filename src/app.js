@@ -1,54 +1,42 @@
 const express = require('express');
 require('dotenv').config()
 const app = express();
-const path = require('path');
-const mysql = require('mysql2');
 const cors = require('cors');
+const Sequelize = require('sequelize');
+const config = require('./config/config.js')[process.env.NODE_ENV || 'development'];
+const router = require('./routes/index.js');
 
+// on utilise cors pour autoriser les requêtes provenant d'autres domaines
 app.use(cors())
-app.options('*', cors())
+app.options(process.env.FRONTEND_URL, cors())
 
-const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PWD,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT,
+// on se connecte à la base de données avec la configuration de sequelize
+const sequelize = new Sequelize(config.database, config.username, config.password, {
+    port: config.port,
+    host: config.host,
+    dialect: config.dialect,
 });
 
-const pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PWD,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT,
-    connectionLimit: 10,
-});
+// on synchronise sequelize avec la base de données
+// La synchronisation permet de créer les tables dans la base de données si elles n'existent pas
 
-connection.connect((err) => {
-    if (err) {
-        console.error('error connecting db :', err);
-        return;
-    }
-});
-
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
-
-app.get('/api/articles', (req, res) => {
-    pool.query('SELECT * FROM articles', (err, results) => {
-        if (err) {
-            console.error('not found :', err);
-            return;
-        }
-        res.send({
-            data: results,
-            succes: true
-        });
+sequelize.sync()
+    .then(() => {
+        console.log('database synchronised');
     })
-});
+    .catch(err => {
+        console.error('database synchronisation error :', err);
+    });
 
+// On définit une route initiale pour vérifier que le serveur fonctionne
+app.get("/", (req, res) => {
+    res.send("Welcome to my API");
+})
+
+// on définit la route pour récupérer tous les articles avec les controllers
+app.use("/api", router);
+
+// on lance le serveur sur le port défini dans le fichier .env
 app.listen(process.env.PORT, () => {
     console.log(`server launch on port ${process.env.PORT}`);
 });
