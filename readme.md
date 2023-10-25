@@ -12,5 +12,5 @@
     )
 
 ## insert data in DB
-    INSERT INTO articles (titre, description, date) VALUES ?
 
+    INSERT INTO articles (titre, description, date) VALUES ?
