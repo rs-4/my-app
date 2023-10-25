@@ -1,3 +1,26 @@
+const dotenv = require('dotenv');
+
+// On récupère l'environement dans lequel on se trouve (développement, production, test)
+const environment = process.env.NODE_ENV || 'development';
+
+let envFile;
+
+// On détermine le fichier .env à utiliser en fonction de l'environement
+switch (environment) {
+  case 'development':
+    envFile = '.env.local';
+    break;
+  case 'production':
+    envFile = '.env.prod';
+    break;
+  default:
+    envFile = '.env.dev';
+    break;
+}
+
+// On charge les variables d'environement du fichier .env
+dotenv.config({ path: envFile });
+
 // destructuration des variables d'environement dans le fichier .env
 const { DB_USER, DB_PWD, DB_NAME, DB_HOST, DB_PORT } = process.env;
 
