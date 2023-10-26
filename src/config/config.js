@@ -8,7 +8,7 @@ let envFile;
 // On détermine le fichier .env à utiliser en fonction de l'environement
 switch (environment) {
   case 'development':
-    envFile = '.env.local';
+    envFile = '.env.dev';
     break;
   case 'production':
     envFile = '.env.prod';
