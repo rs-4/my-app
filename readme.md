@@ -16,10 +16,10 @@
     INSERT INTO articles (titre, description, date) VALUES ?
 
 ## DOCKERISATION : 
-    - 1: Construire une image BDD (Sql, mongo etc...)
-    - 2: Initialisation des données (création table Article, insert)
-    - 3: Lancer un container 
-    - 4: vérifier sa bonne éxécution
-    - 5: revoir le dockerfile du backend pour que la connexion à la BDD (container) puisse se faire 
-    - 6: créer un docker compose pour orchestrer le build des images et le run des containers
-    - 7: containeriser le front
+  
+    - 1: containeriser le front
+        - créer un dockerfile (npm run build puis npm run start)
+        - ajouter le service dans le docker compose 
+    - 2 : tester la connexion entre les 3 services sur docker en lancant le docker compose
+        
+
