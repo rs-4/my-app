@@ -1,23 +1,31 @@
-# ENV EXECUTION
+# Use an official Node.js runtime as a parent image
 FROM node:18.12.0-alpine
 
-# define the directory app
+# installer bash
+RUN apk update && apk add bash
+
+# Set the working directory to /app
 WORKDIR /app
 
-# copy the package.json to install dependencies
-COPY package.json .
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
 
-# install all dependencies
+# Install any needed dependencies specified in package.json
 RUN npm install
 
-# set NODE ENV var env
 ENV NODE_ENV=production
+ENV PORT=3030
+ENV DB_HOST=my-app-sql
+ENV DB_USER='root'
+ENV DB_PWD='root'
+ENV DB_NAME='ynov_app'
+ENV DB_PORT=3306
+ENV FRONTEND_URL='http://localhost:3000'
 
-# copy all files from current dir to /app in container
+# Copy the rest of the application code to the working directory
 COPY . .
 
-# expose the port 3000
-EXPOSE 3000
+EXPOSE 3030
 
-# run the command to start the app
-CMD [ "npm", "run", "start" ]
+# Start the Express.js server with nodemon
+CMD ["npm", "run", "start"]
