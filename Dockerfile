@@ -19,6 +19,10 @@ ENV NODE_ENV=production
 # Copy the rest of the application code to the working directory
 COPY . .
 
+# permission to script bash
+RUN chmod +x ./wait-for-it.sh
+RUN chmod +x ./wait-for-services-sql.sh
+
 EXPOSE 3030
 
 # Start the Express.js server with nodemon
