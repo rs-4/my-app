@@ -1,9 +1,6 @@
 # Use an official Node.js runtime as a parent image
 FROM node:18.12.0-alpine
 
-# installer bash
-RUN apk update && apk add bash
-
 # Set the working directory to /app
 WORKDIR /app
 
