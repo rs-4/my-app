@@ -19,4 +19,4 @@ COPY . .
 EXPOSE 3030
 
 # Start the Express.js server with nodemon
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "wait"]
