@@ -5,7 +5,8 @@ const cors = require('cors');
 const Sequelize = require('sequelize');
 const config = require('./config/config.js')[process.env.NODE_ENV || 'development'];
 const router = require('./routes/index.js');
-
+const redis = require('redis');
+const db = require('./models/index.js');
 // on utilise cors pour autoriser les requêtes provenant d'autres domaines
 app.use(cors())
 app.options(process.env.FRONTEND_URL, cors());
@@ -20,6 +21,17 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
 // on synchronise sequelize avec la base de données
 // La synchronisation permet de créer les tables dans la base de données si elles n'existent pas
 
+// tester la connection redis:
+const redisClient = redis.createClient({
+    host: '127.0.0.1',
+    port: 6379,
+    password:'root'
+});
+
+redisClient.connect().then(() => {
+    console.log("redis conencted")
+}).catch(err => console.log(err));
+
 sequelize.sync()
     .then(() => {
         console.log('database synchronised');
@@ -31,6 +43,25 @@ sequelize.sync()
 // On définit une route initiale pour vérifier que le serveur fonctionne
 app.get("/", (req, res) => {
     res.send("Welcome to my API");
+})
+
+app.get('/api/data-replication', async (req, res) => {
+    try {
+        // je vais chercher mes données en BDD
+        const articles = await db.Article.findAll();
+        console.log(articles);
+        // je publie mes données dans redis dans le channel articles
+        const publishMessage = await redisClient.publish('articles', JSON.stringify(articles));
+        console.log(publishMessage);
+        res.status(200).json({
+            numberOfSub: publishMessage,
+            message: "channel successfully published",
+            success: true
+        });
+    }
+    catch (err) {
+        res.status(500).json({ message: err.message });
+    }
 })
 
 // on définit la route pour récupérer tous les articles avec les controllers
