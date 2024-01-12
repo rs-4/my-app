@@ -21,6 +21,7 @@ module.exports = {
 
     },
 
+    // controller pour récupérer un article
     getArticle: async (req, res) => { 
             
             try {
