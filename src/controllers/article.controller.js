@@ -19,5 +19,23 @@ module.exports = {
             res.status(500).json({ message: err.message });
         }
 
+    },
+
+    getArticle: async (req, res) => { 
+            
+            try {
+                // on récupère l'article avec la méthode de sequelize findByPk()
+                const article = await db.Article.findByPk(req.params.id);
+                // on renvoie l'article en json
+                res.status(200).json({
+                    results: article,
+                    success: true
+                });
+            }
+    
+            catch (err) {
+                // si une erreur se produit, on renvoie un code 500 avec le message de l'erreur
+                res.status(500).json({ message: err.message });
+            }
     }
 }
