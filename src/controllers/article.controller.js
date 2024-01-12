@@ -1,6 +1,7 @@
 const db = require('../models');
 
 module.exports = {
+
     // controller pour récupérer tous les articles
     getArticles: async (req, res) => {
 
