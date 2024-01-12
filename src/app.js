@@ -7,9 +7,19 @@ const config = require('./config/config.js')[process.env.NODE_ENV || 'developmen
 const router = require('./routes/index.js');
 const redis = require('redis');
 const db = require('./models/index.js');
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsDoc = require('swagger-jsdoc');
+const options = require('./swaggerOptions.js');
+
 // on utilise cors pour autoriser les requêtes provenant d'autres domaines
 app.use(cors())
 app.options(process.env.FRONTEND_URL, cors());
+
+const specs = swaggerJsDoc(options);
+
+app.use(swaggerUi.serve);
+
+app.get("/api-docs",swaggerUi.setup(specs));
 
 // on se connecte à la base de données avec la configuration de sequelize
 const sequelize = new Sequelize(config.database, config.username, config.password, {
@@ -40,10 +50,11 @@ sequelize.sync()
         console.error('database synchronisation error :', err);
     });
 
-// On définit une route initiale pour vérifier que le serveur fonctionne
-app.get("/", (req, res) => {
-    res.send("Welcome to my API");
-})
+    
+    // On définit une route initiale pour vérifier que le serveur fonctionne
+    app.get("/", (req, res) => {
+        res.send("Welcome to my API");
+    })
 
 app.get('/api/data-replication', async (req, res) => {
     try {
