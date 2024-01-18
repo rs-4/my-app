@@ -9,7 +9,7 @@ module.exports = {
             // on récupère tous les articles avec la méthode de sequelize findAll()
             const articles = await db.Article.findAll();
             // on renvoie les articles en json
-            res.status(200).json({
+            return res.status(200).json({
                 results: articles,
                 success: true
             });
