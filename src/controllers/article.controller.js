@@ -17,7 +17,10 @@ module.exports = {
 
         catch (err) {
             // si une erreur se produit, on renvoie un code 500 avec le message de l'erreur
-            res.status(500).json({ message: err.message });
+            res.status(500).json({
+                success: false,
+                message: err.message
+            });
         }
 
     },
