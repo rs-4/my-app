@@ -5,6 +5,8 @@ module.exports = {
     // controller pour récupérer tous les articles
     getArticles: async (req, res) => {
 
+        console.log(req.query);
+
         try {
             // on récupère tous les articles avec la méthode de sequelize findAll()
             const articles = await db.Article.findAll();
