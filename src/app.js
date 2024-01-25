@@ -25,6 +25,9 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
     port: config.port,
     host: config.host,
     dialect: config.dialect,
+    dialectOptions: {
+        connectTimeout: 60000
+    }
 });
 
 // on synchronise sequelize avec la base de données
