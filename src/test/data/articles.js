@@ -1,6 +1,6 @@
 const { faker } = require('@faker-js/faker');
 
-function createRandomUser() {
+function createRandomArticle() {
     return {
         id: faker.string.uuid(),
         title: faker.lorem.lines(1),
@@ -9,8 +9,10 @@ function createRandomUser() {
     };
 }
 
-const ARTICLES = faker.helpers.multiple(createRandomUser, {
+const ARTICLE = createRandomArticle();
+
+const ARTICLES = faker.helpers.multiple(createRandomArticle, {
     count: 10,
 });
 
-module.exports = { ARTICLES };
+module.exports = { ARTICLES, ARTICLE };
